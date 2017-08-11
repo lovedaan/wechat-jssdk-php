@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>Document</title>
+    <script type="text/javascript" src="http://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+<body>
+    <div class="box">
+        <input type="button" value="点击获取当前网络" id="btn" />
+        <input type="button" value="打开相机或手机相册" id="btn2" />
+        <h1 id="inner"></h1>
+        <h2 id="inner2"></h2>
+    </div>
+    <script type="text/javascript">
+
+     $.ajax({
+        type:'post',
+        url:'./index.php',
+        data:{
+            url:encodeURI(location.href.split('#')[0])
+        },
+        dataType:'json',
+        success: function (data) {
+            console.log(data);
+                wx.config({
+                debug: true,
+                appId: data.appId,
+                timestamp: data.timestamp,
+                nonceStr: data.nonceStr,
+                signature: data.signature,
+                jsApiList: [
+                  // 所有要调用的 API 都要加到这个列表中
+                  'getNetworkType',
+                  'chooseImage',
+                  'uploadImage'
+                ]
+            });
+        }
+     });
+      wx.ready(function () {
+        // 在这里调用 API
+        var btn = document.querySelector('#btn');
+        var btn2 = document.querySelector('#btn2');
+        var inner = document.querySelector('#inner');
+        var inner2 = document.querySelector('#inner2');
+        btn.onclick = function () {
+            wx.getNetworkType({
+                success: function (res) {
+                    var networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
+
+                    inner.innerHTML = networkType;
+                }
+            });
+        }
+        btn2.onclick = function () {
+            wx.chooseImage({
+                count: 1, // 默认9
+                sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    console.log(localIds);
+
+                    var Img = new Image();
+                    Img.src=localIds[0];
+                    Img.width = 200;
+                    Img.onload = function () {
+                        document.body.appendChild(Img);
+                    }
+
+                    //上传图片
+                    // 上传照片
+                    wx.uploadImage({
+                        localId: localIds[0],
+                        isShowProgressTips: 1,
+                        success: function(res) {
+                            serverId = res.serverId;
+
+                            $.ajax({
+                                'type':'get',
+                                url:'./upload.php',
+                                data:{
+                                    id:serverId
+                                },
+                                dataType:'json',
+                                success:function (data) {
+                                    inner2.innerHTML = data.errmsg;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+     });
+    </script>
+</body>
+</html>
