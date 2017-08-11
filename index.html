@@ -6,9 +6,74 @@
     <title>Document</title>
     <script type="text/javascript" src="http://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style-type: none;
+        }
+        .nav{
+            width: 100%;
+            overflow: hidden;
+        }
+        .nav .nav_list{
+            width: 100%;
+            overflow: hidden;
+        }
+        .nav .nav_list li{
+            float: left;
+            width: 25%;
+            margin-bottom:10px;
+            text-align: center;
+            padding:5px 0;
+        }
+        .nav .nav_list li span{
+            display: block;
+            margin-top:8px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="box">
+        <div class="nav">
+            <ul class="nav_list">
+                <li>
+                    <img width="60" src="images/clubNav_pic1.png" alt="" />
+                    <span>篮球</span>
+                </li>
+                <li>
+                    <img width="60" src="images/clubNav_pic2.png" alt="" />
+                    <span>篮球</span>
+                </li>
+                <li>
+                    <img width="60" src="images/clubNav_pic3.png" alt="" />
+                    <span>篮球</span>
+                </li>
+                <li>
+                    <img width="60" src="images/clubNav_pic4.png" alt="" />
+                    <span>篮球</span>
+                </li>
+                <li>
+                    <img width="60" src="images/clubNav_pic5.png" alt="" />
+                    <span>篮球</span>
+                </li>
+                <li>
+                    <img width="60" src="images/clubNav_pic6.png" alt="" />
+                    <span>篮球</span>
+                </li>
+                <li>
+                    <img width="60" src="images/clubNav_pic7.png" alt="" />
+                    <span>篮球</span>
+                </li>
+                <li>
+                    <img width="60" src="images/clubNav_pic8.png" alt="" />
+                    <span>篮球</span>
+                </li>
+            </ul>
+        </div>
         <input type="button" value="点击获取当前网络" id="btn" />
         <input type="button" value="打开相机或手机相册" id="btn2" />
         <h1 id="inner"></h1>
@@ -35,13 +100,27 @@
                   // 所有要调用的 API 都要加到这个列表中
                   'getNetworkType',
                   'chooseImage',
-                  'uploadImage'
+                  'uploadImage',
+                  'onMenuShareTimeline'
                 ]
             });
         }
      });
       wx.ready(function () {
         // 在这里调用 API
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+            title: '我想做个好人', // 分享标题
+            link: window.location, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: 'http://www.webhaitao.science/php/3/images/1.png', // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+                console.log('分享成功！');
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
         var btn = document.querySelector('#btn');
         var btn2 = document.querySelector('#btn2');
         var inner = document.querySelector('#inner');
