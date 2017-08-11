@@ -2,11 +2,11 @@
 class JSSDK {
   private $appId;
   private $appSecret;
-  private $url;                             //1.增加url变量
+  private $url;                             //***1.增加url变量
   public function __construct($appId, $appSecret,$url) {
     $this->appId = $appId;
     $this->appSecret = $appSecret;
-    $this->url=$url;                        //2.url赋值
+    $this->url=$url;                        //***2.url赋值
   }
 
   public function getSignPackage() {
@@ -15,7 +15,7 @@ class JSSDK {
     // 注意 URL 一定要动态获取，不能 hardcode.
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
     //$url = "$protocol$_SERVER[SERVER_NAME]$_SERVER[REQUEST_URI]";
-    $url=$this->url;  //3.注释掉上一句，补充这一句
+    $url=$this->url;  //***3.注释掉上一句，补充这一句
     $timestamp = time();
     $nonceStr = $this->createNonceStr();
 
